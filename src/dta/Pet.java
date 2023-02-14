@@ -49,7 +49,7 @@ public class Pet {
 
     @Override
     public String toString(){
-        String msg = String.format("%s,%s,%s,%.3f,%s",
+        String msg = String.format("%s,%s,%s,%f,%s",
                 id , description , importDate , unitPrice , category) ;
         return msg ;
     }

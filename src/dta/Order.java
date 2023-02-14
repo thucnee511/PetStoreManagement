@@ -9,22 +9,22 @@ package dta;
  * @author Admin
  */
 public class Order {
-    private String ordid ;
+    private String ordId ;
     private String date ;
     private String customerName ;
     private Pet pet ;
     private int quantity ;
 
-    public Order(String ordid, String date, String customerName, Pet pet, int quantity) {
-        this.ordid = ordid;
+    public Order(String ordId, String date, String customerName, Pet pet, int quantity) {
+        this.ordId = ordId;
         this.date = date;
         this.customerName = customerName;
         this.pet = pet;
         this.quantity = quantity;
     }
 
-    public String getOrdid() {
-        return ordid;
+    public String getOrdId() {
+        return ordId;
     }
 
     public String getDate() {
@@ -34,9 +34,33 @@ public class Order {
     public String getCustomerName() {
         return customerName;
     }
+
+    public Pet getPet() {
+        return pet;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
     
     public double getTotal(){
         return  (double)quantity * pet.getUnitPrice() ;
     }
 
+    public void show(){
+        String msg = String.format("%-10s|%-10s|%-20s|%10d|%12s",
+                ordId , date , customerName , quantity , toStringTotal()) ;
+        System.out.println(msg);
+    }
+    private String toStringTotal(){
+        String ret = String.format("$ %.0f" , getTotal()) ;
+        return ret ;
+    }
+    
+    @Override
+    public String toString(){
+        String msg = String.format("%s,%s,%s,%s,%d", 
+                ordId , date , customerName , pet.getId() , quantity);
+        return msg ;
+    }
 }

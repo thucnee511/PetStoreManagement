@@ -43,7 +43,7 @@ public class FileHandler {
             file.createNewFile();
             FileWriter writer = new FileWriter(file);
             for (String line : dta) {
-                writer.write(line);
+                writer.write(line+"\n");
             }
             writer.close();
         } catch (IOException e) {

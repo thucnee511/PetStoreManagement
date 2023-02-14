@@ -179,8 +179,8 @@ public class InputHandler {
             }
         }
     }
-    
-    public static boolean getBoolean(String inputMsg){
+
+    public static boolean getBoolean(String inputMsg) {
         while (true) {
             try {
                 System.out.print(inputMsg);
@@ -190,6 +190,22 @@ public class InputHandler {
                 System.out.println("True or False!!");
             }
         }
+    }
+
+    public static boolean checkDateDMY(String date) {
+        String _date[] = date.split("/");
+        int month = Integer.parseInt(_date[1]);
+        int day = Integer.parseInt(_date[0]);
+        int year = Integer.parseInt(_date[2]);
+        return checkValidDate(day, month, year) ;
+    }
+    
+    public static boolean checkDateMDY(String date) {
+        String _date[] = date.split("/");
+        int month = Integer.parseInt(_date[0]);
+        int day = Integer.parseInt(_date[1]);
+        int year = Integer.parseInt(_date[2]);
+        return checkValidDate(day, month, year) ;
     }
 
     private static boolean checkValidDate(int day, int month, int year) {
