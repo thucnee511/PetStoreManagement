@@ -8,9 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 import tools.FileHandler;
 import tools.InputHandler;
 import ui.Menu;
@@ -20,11 +18,16 @@ import ui.Menu;
  * @author Admin
  */
 public class PetStoreManagement {
-    private final String PETDATPATH = "/src/files/pets.dat" ;
-    private final String ORDDATPATH = "/src/files/orders.dat" ;
-    private Map<String, Pet> pets = new HashMap<>();
-    private Map<String, Order> orders = new HashMap<>();
 
+    private final String PETDATPATH = "/src/files/pets.dat";
+    private final String ORDDATPATH = "/src/files/orders.dat";
+    private final Map<String, Pet> pets = new HashMap<>();
+    private final Map<String, Order> orders = new HashMap<>();
+
+    public PetStoreManagement(){
+        this.loadData() ;
+    }
+    
     public void addNewPet() {
         while (true) {
             String petId = InputHandler.getString("Enter pet's id: ", "Invalid id entered!", "P\\d*");
@@ -33,7 +36,7 @@ public class PetStoreManagement {
                 continue;
             } else {
                 String des = InputHandler.getString("Enter pet's description: ", "Invalid description!");
-                String imp = InputHandler.getDateMDY("Enter pet's import date: ");
+                String imp = InputHandler.getDate("Enter pet's import date: ","MM/dd/yyyy");
                 double price = InputHandler.getPositiveReal("Enter pet's unit price: ", "Invalid unit price!");
                 String cate = InputHandler.getString("Enter pet's category: ", "Invalid category [Cat,Dog,Parrot]!", "([Cc][Aa][Tt])|([Dd][Oo][Gg])|([Pp][Aa][Rr]{2}[Oo][Tt])");
                 pets.put(petId, new Pet(petId, des, imp, price, cate));
@@ -69,7 +72,7 @@ public class PetStoreManagement {
             try {
                 String catereg = "([Cc][Aa][Tt])|([Dd][Oo][Gg])|([Pp][Aa][Rr]{2}[Oo][Tt])";
                 int _price = 0;
-                if (!imp.isEmpty() && !InputHandler.checkDateMDY(imp)) {
+                if (!imp.isEmpty() && !InputHandler.checkValidDate(imp , "MM/dd/yyyy")) {
                     throw new Exception();
                 }
                 if (!price.isEmpty()) {
@@ -132,8 +135,8 @@ public class PetStoreManagement {
     public void addOrder() {
         while (true) {
             String ordId = InputHandler.getString("Enter order's id: ", "Invalid id", "O\\d*");
-            if (findOrderById(ordId) != null) {
-                String date = InputHandler.getDateMDY("Enter order's date: ");
+            if (findOrderById(ordId) == null) {
+                String date = InputHandler.getDate("Enter order's date: ","MM/dd/yyyy");
                 String cusName = InputHandler.getString("Enter customer's name: ", "Invalid name");
                 String pId;
                 while (true) {
@@ -157,8 +160,8 @@ public class PetStoreManagement {
     }
 
     public void listOrder() {
-        String startDate = InputHandler.getDateMDY("Enter start date: ");
-        String endDate = InputHandler.getDateMDY("Enter end date: ");
+        String startDate = InputHandler.getDate("Enter start date: ","MM/dd/yyyy");
+        String endDate = InputHandler.getDate("Enter end date: ","MM/dd/yyyy");
         System.out.println("LIST ORDER FROM %s TO %s");
         System.out.println(" No.| Order Id |Order Date| Customer           | Pet Count| Order Total");
         int count = 0;
@@ -177,7 +180,7 @@ public class PetStoreManagement {
             }
         }
         String totalStr = String.format("$ %.0f", total);
-        String msg = String.format("    | Total     |                    |%10d|%12s", petCount, totalStr);
+        String msg = String.format("    | Total    |          |                    |%10d|%12s", petCount, totalStr);
         System.out.println(msg);
     }
 
@@ -297,43 +300,43 @@ public class PetStoreManagement {
             o.show();
         }
         String totalStr = String.format("$ %.0f", total);
-        String msg = String.format("    | Total     |                    |%10d|%12s", petCount, totalStr);
+        String msg = String.format("    | Total    |          |                    |%10d|%12s", petCount, totalStr);
         System.out.println(msg);
     }
-    
-    public void saveData(){
-        ArrayList<String> petDta = new ArrayList<>() ;
-        ArrayList<String> ordDta = new ArrayList<>() ;
-        for(Map.Entry<String,Pet> entry : pets.entrySet()){
-            petDta.add(entry.getValue().toString()) ;
+
+    public void saveData() {
+        ArrayList<String> petDta = new ArrayList<>();
+        ArrayList<String> ordDta = new ArrayList<>();
+        for (Map.Entry<String, Pet> entry : pets.entrySet()) {
+            petDta.add(entry.getValue().toString());
         }
-        for(Map.Entry<String,Order> entry : orders.entrySet()){
-            ordDta.add(entry.getValue().toString()) ;
+        for (Map.Entry<String, Order> entry : orders.entrySet()) {
+            ordDta.add(entry.getValue().toString());
         }
-        FileHandler.writeToFile(PETDATPATH, petDta) ;
-        FileHandler.writeToFile(ORDDATPATH, ordDta) ;
+        FileHandler.writeToFile(PETDATPATH, petDta);
+        FileHandler.writeToFile(ORDDATPATH, ordDta);
     }
-    
-    public void loadData(){
-        ArrayList<String> dta = new ArrayList<>() ;
-        dta.addAll(FileHandler.readFromFile(PETDATPATH)) ;
-        dta.addAll(FileHandler.readFromFile(ORDDATPATH)) ;
+
+    public void loadData() {
+        ArrayList<String> dta = new ArrayList<>();
+        dta.addAll(FileHandler.readFromFile(PETDATPATH));
+        dta.addAll(FileHandler.readFromFile(ORDDATPATH));
         pets.clear();
         orders.clear();
-        for(String line : dta){
+        for (String line : dta) {
             String dataPart[] = line.split(",");
-            if (dataPart[0].matches("P\\d*")){
+            if (dataPart[0].matches("P\\d*")) {
                 pets.put(dataPart[0], new Pet(dataPart[0],
-                         dataPart[1],
-                         dataPart[2],
-                         Double.parseDouble(dataPart[3]),
-                         dataPart[4]));
-            }else if(dataPart[0].matches("O\\d*")){
+                        dataPart[1],
+                        dataPart[2],
+                        Double.parseDouble(dataPart[3]),
+                        dataPart[4]));
+            } else if (dataPart[0].matches("O\\d*")) {
                 orders.put(dataPart[0], new Order(dataPart[0],
-                         dataPart[1],
-                         dataPart[2],
-                         findPetById(dataPart[3]),
-                         Integer.parseInt(dataPart[4]))) ;
+                        dataPart[1],
+                        dataPart[2],
+                        findPetById(dataPart[3]),
+                        Integer.parseInt(dataPart[4])));
             }
         }
     }

@@ -4,6 +4,9 @@
  */
 package tools;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -132,54 +135,6 @@ public class InputHandler {
         }
     }
 
-    public static String getDateDMY(String inputMsg) {
-        String regex = "\\d{2}/\\d{2}\\d{4}";
-        while (true) {
-            try {
-                System.out.print(inputMsg);
-                String inputStr = sc.nextLine();
-                if (!inputStr.matches(regex)) {
-                    throw new Exception();
-                }
-                String date[] = inputStr.split("/");
-                int day = Integer.parseInt(date[0]);
-                int month = Integer.parseInt(date[1]);
-                int year = Integer.parseInt(date[2]);
-                if (checkValidDate(day, month, year)) {
-                    return inputStr;
-                } else {
-                    throw new Exception();
-                }
-            } catch (Exception e) {
-                System.out.println("Invalid date: dd/mm/yyyy");
-            }
-        }
-    }
-
-    public static String getDateMDY(String inputMsg) {
-        String regex = "\\d{2}/\\d{2}\\d{4}";
-        while (true) {
-            try {
-                System.out.print(inputMsg);
-                String inputStr = sc.nextLine();
-                if (!inputStr.matches(regex)) {
-                    throw new Exception();
-                }
-                String date[] = inputStr.split("/");
-                int month = Integer.parseInt(date[0]);
-                int day = Integer.parseInt(date[1]);
-                int year = Integer.parseInt(date[2]);
-                if (checkValidDate(day, month, year)) {
-                    return inputStr;
-                } else {
-                    throw new Exception();
-                }
-            } catch (Exception e) {
-                System.out.println("Invalid date: mm/dd/yyyy");
-            }
-        }
-    }
-
     public static boolean getBoolean(String inputMsg) {
         while (true) {
             try {
@@ -192,50 +147,29 @@ public class InputHandler {
         }
     }
 
-    public static boolean checkDateDMY(String date) {
-        String _date[] = date.split("/");
-        int month = Integer.parseInt(_date[1]);
-        int day = Integer.parseInt(_date[0]);
-        int year = Integer.parseInt(_date[2]);
-        return checkValidDate(day, month, year) ;
-    }
-    
-    public static boolean checkDateMDY(String date) {
-        String _date[] = date.split("/");
-        int month = Integer.parseInt(_date[0]);
-        int day = Integer.parseInt(_date[1]);
-        int year = Integer.parseInt(_date[2]);
-        return checkValidDate(day, month, year) ;
+    public static String getDate(String inputMsg , String dateFormat) {
+        while (true) {
+            try {
+                System.out.print(inputMsg);
+                String inputStr = sc.nextLine();
+                if (checkValidDate(inputStr , dateFormat)) {
+                    return inputStr;
+                } else {
+                    throw new Exception();
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid date: " + dateFormat);
+            }
+        }
     }
 
-    private static boolean checkValidDate(int day, int month, int year) {
-        boolean leap = false;
-        if (year < 0) {
-            return false;
-        }
-        if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) {
-            leap = true;
-        }
-        if (month == 2) {
-            if (leap) {
-                return day <= 29;
-            } else {
-                return day <= 28;
-            }
-        } else if (month < 8) {
-            if (month % 2 == 1) {
-                return day <= 31;
-            } else {
-                return day <= 30;
-            }
-        } else if (month <= 12) {
-            if (month % 2 == 0) {
-                return day <= 31;
-            } else {
-                return day <= 30;
-            }
-        } else {
-            return false;
+    public static boolean checkValidDate(String date , String dateFormat) {
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat) ;
+            Date _date = sdf.parse(date) ;
+            return true ;
+        }catch(ParseException e){
+            return false ;
         }
     }
 }
