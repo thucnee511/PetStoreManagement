@@ -16,6 +16,7 @@ public class Procedure {
     public static void main(String[] args) {
         Menu menu = new Menu("Pet Store Management") ;
         menu.addOption("Add a pet") ;
+        menu.addOption("Show all pet");
         menu.addOption("Find a pet") ;
         menu.addOption("Update a pet") ;
         menu.addOption("Delete a pet") ;
@@ -36,38 +37,42 @@ public class Procedure {
                     break ;
                 }
                 case 2:{
-                    psm.findPet();
+                    psm.showAllPet();
                     break ;
                 }
                 case 3:{
-                    psm.updatePet();
+                    psm.findPet();
                     break ;
                 }
                 case 4:{
-                    psm.deletePet();
+                    psm.updatePet();
                     break ;
                 }
                 case 5:{
-                    psm.addOrder();
+                    psm.deletePet();
                     break ;
                 }
                 case 6:{
-                    psm.listOrder();
+                    psm.addOrder();
                     break ;
                 }
                 case 7:{
-                    psm.sortOrder();
+                    psm.listOrder();
                     break ;
                 }
                 case 8:{
-                    psm.saveData();
+                    psm.sortOrder();
                     break ;
                 }
                 case 9:{
-                    psm.loadData();
+                    psm.saveData();
                     break ;
                 }
                 case 10:{
+                    psm.loadData();
+                    break ;
+                }
+                case 11:{
                     return ;
                 }
             }

@@ -36,7 +36,7 @@ public class PetStoreManagement {
                 continue;
             } else {
                 String des = InputHandler.getString("Enter pet's description: ", "Invalid description!");
-                String imp = InputHandler.getDate("Enter pet's import date: ","MM/dd/yyyy");
+                String imp = InputHandler.getDate("Enter pet's import date: ","mm/dd/yyyy");
                 double price = InputHandler.getPositiveReal("Enter pet's unit price: ", "Invalid unit price!");
                 String cate = InputHandler.getString("Enter pet's category: ", "Invalid category [Cat,Dog,Parrot]!", "([Cc][Aa][Tt])|([Dd][Oo][Gg])|([Pp][Aa][Rr]{2}[Oo][Tt])");
                 pets.put(petId, new Pet(petId, des, imp, price, cate));
@@ -44,6 +44,12 @@ public class PetStoreManagement {
             if (!Menu.getYesOrNo("Continously add new pet?")) {
                 return;
             }
+        }
+    }
+    
+    public void showAllPet(){
+        for(Map.Entry<String , Pet> entry : pets.entrySet()){
+            System.out.println(entry.getValue().toString());
         }
     }
 
@@ -72,7 +78,7 @@ public class PetStoreManagement {
             try {
                 String catereg = "([Cc][Aa][Tt])|([Dd][Oo][Gg])|([Pp][Aa][Rr]{2}[Oo][Tt])";
                 int _price = 0;
-                if (!imp.isEmpty() && !InputHandler.checkValidDate(imp , "MM/dd/yyyy")) {
+                if (!imp.isEmpty() && !InputHandler.checkValidDate(imp , "mm/dd/yyyy")) {
                     throw new Exception();
                 }
                 if (!price.isEmpty()) {
@@ -136,7 +142,7 @@ public class PetStoreManagement {
         while (true) {
             String ordId = InputHandler.getString("Enter order's id: ", "Invalid id", "O\\d*");
             if (findOrderById(ordId) == null) {
-                String date = InputHandler.getDate("Enter order's date: ","MM/dd/yyyy");
+                String date = InputHandler.getDate("Enter order's date: ","mm/dd/yyyy");
                 String cusName = InputHandler.getString("Enter customer's name: ", "Invalid name");
                 String pId;
                 while (true) {
@@ -160,9 +166,9 @@ public class PetStoreManagement {
     }
 
     public void listOrder() {
-        String startDate = InputHandler.getDate("Enter start date: ","MM/dd/yyyy");
-        String endDate = InputHandler.getDate("Enter end date: ","MM/dd/yyyy");
-        System.out.println("LIST ORDER FROM %s TO %s");
+        String startDate = InputHandler.getDate("Enter start date: ","mm/dd/yyyy");
+        String endDate = InputHandler.getDate("Enter end date: ","mm/dd/yyyy");
+        System.out.println("LIST ORDER FROM "+ startDate + " TO " + endDate);
         System.out.println(" No.| Order Id |Order Date| Customer           | Pet Count| Order Total");
         int count = 0;
         int petCount = 0;
@@ -216,7 +222,7 @@ public class PetStoreManagement {
                     Collections.sort(list, (Map.Entry<String, Order> o1, Map.Entry<String, Order> o2) -> {
                         String date1 = o1.getValue().getDate();
                         String date2 = o2.getValue().getDate();
-                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
                         Date _date1 = null;
                         Date _date2 = null;
                         try {
@@ -241,7 +247,7 @@ public class PetStoreManagement {
                         public int compare(Map.Entry<String, Order> o1, Map.Entry<String, Order> o2) {
                             String date1 = o1.getValue().getDate();
                             String date2 = o2.getValue().getDate();
-                            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                            SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
                             Date _date1 = null;
                             Date _date2 = null;
                             try {
@@ -342,7 +348,7 @@ public class PetStoreManagement {
     }
 
     private int compareDate(String date1, String date2) {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
         Date _date1 = null;
         Date _date2 = null;
         try {
